@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <h2>JOIN PAGE</h2>
+    <form action="/user/join_success" id="login_form" method="post" enctype="multipart/form-data">
+        <table>
+            <tr>
+                <td>ID</td>  <!-- 중복체크 AJAX로 알림주기 / 특수문자 -->
+                <td ><input type="text" id="userid" name="userid">
+                    <p style="display: none;" id="userid_msg"></p>
+                </td>
+            </tr>
+            <tr>
+                <td>PASSWORD</td> <!-- password double check -->
+                <td ><input type="password" id="userpw" name="userpw"></td>
+            </tr>
+            <tr>
+                <td>PASSWORD CHECK</td>
+                <td><input type="password" id="userpw_check" name="userpw_check"></td>
+            </tr>
+            <tr>
+                <td>NAME</td> <!-- 글자길이 / 특수문자 -->
+                <td><input type="text" name="username" maxlength="10"></td>
+            </tr>
+            <tr>
+                <td>GENDER</td>
+                <td>
+                    <input type="radio" class="gender" name="gender" value="0">MALE
+                    <input type="radio" class="gender" name="gender" value="1">FEMALE
+                </td>
+            </tr>
+            <tr>
+                <td>IMAGE</td>
+                <td><input  type="file" name="img"></td>
+            </tr>
+        </table>
+        <input type="button" id="login_submit" value="JOIN">
+    </form>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
+    <script>
+        const userid = document.querySelector('#userid');
+        const pwd1 = document.querySelector('#userpw');
+        const pwd2 = document.querySelector('#userpw_check');
+        const btn = document.querySelector('#login_submit');
+        const login_form = document.querySelector('#login_form');
+        const userid_msg = document.querySelector('#userid_msg');
+
+        function password_check(){
+            return pwd1.value == pwd2.value;
+        }
+
+        async function userid_check(){
+            let idData = await axios.get(`http://localhost:3000/user/userid_check?userid=${userid.value}`);
+            let login_flag = idData.data.login;
+            if(login_flag){
+                userid_msg.innerHTML = 'CORRECT ID';
+                userid_msg.style.color = 'green';
+                userid_msg.style.display = 'block';
+            }else{
+                userid_msg.innerHTML = 'THIS ID IS ALREADY IN USE.'
+                userid_msg.style.color = 'red';
+                userid_msg.style.display = 'block';
+            }
+        }
+
+        userid.addEventListener('focusout',()=>{
+            userid_check();
+        })
+
+        btn.addEventListener('click',()=>{
+            let pwd_check = password_check();
+            if(pwd_check){
+                login_form.submit();
+            } else {
+                alert('CHECK YOUR PASSWORD');
+                pwd1.value ='';
+                pwd2.value ='';
+                pwd1.focus();
+            }
+        })
+    </script>
+
+
+    <!--
+        <label for="userName">NAME</label>
+        <input id="userName" type="text" name="username"> <br>
+
+        <label for="userId">ID</label>
+        <input id="userId" type="text" name="userid"><br>
+
+        <label for="userPw">PASSWORD</label>
+        <input id="userPw" type="text" name="userpw"><br>
+
+        <label for="genderF">female</label>
+        <input id="genderF" type="radio" name="gender" value="true">
+        <label for="genderM">male</label>
+        <input id="genderM" type="radio" name="gender" value="false"><br>
+    -->
+</body>
+
+</html>

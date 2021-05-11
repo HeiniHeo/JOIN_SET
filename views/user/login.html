@@ -1,0 +1,31 @@
+LOGIN PAGE
+
+<form action="/user/login_check" method="post">
+    <table>
+        <tr>
+            <td id="userid">ID</td>
+            <td><input type="text" name="userid"></td>
+        </tr>
+        <tr>
+            <td id="userpw">PASSWORD</td>
+            <td><input type="password" name="userpw"></td>
+        </tr>
+    </table>
+    <input type="submit" value="LOGIN">
+</form>
+
+{% if flag == '0'%}
+<script type="text/javascript">
+    alert('CHECK YOUR ID AND PASSWORD');
+    // const id = document.querySelector('#userid');
+    // const pw = document.querySelector('#userpw');
+    // id.setAttribute('style','color:red;');
+    // pw.setAttribute('style','color:red;');
+    // id.addEventListener('focus',()=>{
+    //     id.setAttribute('style','color:#000;');
+    // })
+    // pw.addEventListener('focus',()=>{
+    //     pw.setAttribute('style','color:#000;');
+    // })
+</script>
+{% endif%}
